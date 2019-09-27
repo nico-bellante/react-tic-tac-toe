@@ -6,25 +6,23 @@ import Cell, { CellState } from "./Cell";
 const Game = (props: {
   disabled: boolean;
   state: CellState[][];
-  useTurn(coord: Coordinate): void;
+  takeCell(coord: Coordinate): void;
 }) => {
   const N = Array.from(Array(3));
   return (
     <Wrapper>
-      {N.map((_, y) => {
-        return (
-          <Row>
-            {N.map((_, x) => {
-              return (
-                <Cell
-                  onClick={props.disabled ? () => {} : () => props.useTurn({ x, y })}
-                  state={props.state[y][x]}
-                ></Cell>
-              );
-            })}
-          </Row>
-        );
-      })}
+      {N.map((_, y) => (
+        <Row>
+          {N.map((_, x) => {
+            return (
+              <Cell
+                onClick={props.disabled ? undefined : () => props.takeCell({ x, y })}
+                state={props.state[y][x]}
+              ></Cell>
+            );
+          })}
+        </Row>
+      ))}
     </Wrapper>
   );
 };

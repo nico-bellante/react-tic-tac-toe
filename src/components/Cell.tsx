@@ -4,9 +4,11 @@ import { COLORS } from "../theme";
 
 export type CellState = "X" | "O" | " ";
 
-const Cell = (props: { state: CellState; onClick(): void }) => (
+const Cell = (props: { state: CellState; onClick?(): void }) => (
   <Wrapper onClick={props.onClick}>
-    <Text style={{ color: props.state === "X" ? COLORS.redX : COLORS.blueO }}>
+    <Text
+      style={{ color: props.state === "X" ? COLORS.color1.dark : COLORS.color2.dark }}
+    >
       {props.state}
     </Text>
   </Wrapper>
@@ -28,4 +30,5 @@ const Wrapper = styled.div`
 const Text = styled.span`
   font-size: 56px;
   font-weight: 700;
+  -webkit-text-stroke: 2px black;
 `;

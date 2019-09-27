@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import "./App.css";
+import styled, { css } from "styled-components";
 
-import Cell, { CellState } from "./components/Cell";
+import { CellState } from "./components/Cell";
 import Game from "./components/Game";
 
 import { cloneDeep, every, flatten, some } from "lodash";
+import { COLORS } from "./theme";
 
 const DEFAULT_STATE: CellState[][] = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
 
@@ -22,36 +22,43 @@ const App: React.FC = () => {
     }
   }
 
-  const isVictory = some([
-    every(state[0].map(value => value.trim() && value === state[0][0])),
-    every(state[1].map(value => value.trim() && value === state[1][0])),
-    every(state[2].map(value => value.trim() && value === state[2][0])),
-    every(state.map(row => row[0].trim() && row[0] === state[0][0])),
-    every(state.map(row => row[1].trim() && row[1] === state[0][1])),
-    every(state.map(row => row[2].trim() && row[2] === state[0][2])),
-    state[0][0].trim() && state[0][0] === state[1][1] && state[1][1] === state[2][2],
-    state[0][2].trim() && state[0][2] === state[1][1] && state[1][1] === state[2][0],
-  ]);
+  const isXVictory = getIsVictory("X", state);
+  const isOVictoy = getIsVictory("O", state);
+
+  const isVictory = isXVictory || isOVictoy;
 
   const isGameFinished =
     every(flatten(state.map(row => row.map(value => value !== " ")))) || isVictory;
 
   return (
     <Wrapper>
+      <Header style={{ visibility: isGameFinished ? "visible" : "hidden" }}>
+        <h1 style={{ marginBottom: "4px" }}>GAME OVER</h1>
+        <h2
+          style={{
+            marginTop: "4px",
+            color: isXVictory ? COLORS.color1.dark : COLORS.color2.dark,
+          }}
+        >
+          {isVictory ? `${isXVictory ? "X" : "O"} has won the round!` : "- DRAW -"}
+        </h2>
+      </Header>
+
       <Container>
-        {isGameFinished && <h2>GAME OVER!</h2>}
-        {isVictory && <h3>There was a winner.</h3>}
         <Game
           disabled={isGameFinished}
           state={state}
-          useTurn={coord => playTurn(currentPlayer, coord)}
+          takeCell={coord => playTurn(currentPlayer, coord)}
         />
       </Container>
-      {isGameFinished && (
-        <PlayAgainButton onClick={() => setState(DEFAULT_STATE)}>
+      <Footer>
+        <PlayAgainButton
+          style={{ visibility: isGameFinished ? "visible" : "hidden" }}
+          onClick={() => setState(DEFAULT_STATE)}
+        >
           <h3>Play Again?</h3>
         </PlayAgainButton>
-      )}
+      </Footer>
     </Wrapper>
   );
 };
@@ -60,39 +67,63 @@ export default App;
 
 ///////////////////////////////
 
-const Wrapper = styled.div`
+function getIsVictory(player: Player, state: CellState[][]): boolean {
+  return some([
+    every(state[0].map(value => value.trim() && value === player)),
+    every(state[1].map(value => value.trim() && value === player)),
+    every(state[2].map(value => value.trim() && value === player)),
+    every(state.map(row => row[0].trim() && row[0] === player)),
+    every(state.map(row => row[1].trim() && row[1] === player)),
+    every(state.map(row => row[2].trim() && row[2] === player)),
+    player === state[0][0] && player === state[1][1] && player === state[2][2],
+    player === state[0][2] && player === state[1][1] && player === state[2][0],
+  ]);
+}
+
+const FlexCenter = css`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+const Wrapper = styled.div`
+  ${FlexCenter}
   height: 100vh;
-  background: powderblue;
+  background: ${COLORS.color2.light};
+  color: ${COLORS.color1.dark};
 `;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: papayawhip;
+  ${FlexCenter}
+  background: ${COLORS.color1.dark};
   padding: 20px;
   border-radius: 12px;
 `;
 
+const Header = styled.div`
+  height: 200px
+  letter-spacing: 4px;
+  ${FlexCenter}
+  -webkit-text-stroke: 1px black;
+`;
+
+const Footer = styled.div`
+  height: 200px;
+`;
+
 const PlayAgainButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: papayawhip;
-  color: #333333;
-  border-radius: 20px;
+  ${FlexCenter}
+  background: ${COLORS.color1.dark};
+  color: #131313;
+  border-radius: 15px;
   height: 60px;
   width: 150px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   margin-top: 30px;
 
   &:hover {
     cursor: pointer;
-    background: darkseagreen;
-    color: powderblue;
+    background: ${COLORS.color1.bright};
   }
 `;

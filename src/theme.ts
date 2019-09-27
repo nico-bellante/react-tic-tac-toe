@@ -1,7 +1,18 @@
 import randomColor from "randomcolor";
 
-const hue1 = randomColor();
-const hue2 = randomColor();
+const allHueSeeds = [
+  ["red", "blue"],
+  ["green", "purple"],
+  ["yellow", "blue"],
+  ["orange", "blue"],
+  ["green", "blue"],
+  ["blue", "red"],
+];
+
+const [hue1Seed, hue2Seed] = allHueSeeds[Math.floor(Math.random() * allHueSeeds.length)];
+console.log({ hue1Seed, hue2Seed });
+const hue1 = hue1Seed; //randomColor({ hue: hue1Seed });
+const hue2 = hue2Seed; // randomColor({ hue: hue2Seed });
 
 export const COLORS = {
   color1: {

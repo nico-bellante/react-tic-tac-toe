@@ -1,6 +1,7 @@
 {
   "name": "tic-tac-toe",
   "version": "0.1.0",
+  "homepage": "https://nico-bellante.github.io/react-tic-tac-toe",
   "private": true,
   "dependencies": {
     "@types/jest": "24.0.18",
@@ -19,7 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,6 +42,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.140",
     "@types/randomcolor": "^0.5.3",
-    "@types/styled-components": "^4.1.19"
+    "@types/styled-components": "^4.1.19",
+    "gh-pages": "^2.1.1"
   }
 }

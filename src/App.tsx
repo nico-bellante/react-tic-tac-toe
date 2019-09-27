@@ -8,9 +8,9 @@ import { cloneDeep, every, flatten, some } from "lodash";
 import { COLORS } from "./theme";
 
 const DEFAULT_STATE: CellState[][] = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
-
+const DEFAULT_PLAYER: Player = "X";
 const App: React.FC = () => {
-  const [currentPlayer, setCurrentPlayer] = useState<Player>("X");
+  const [currentPlayer, setCurrentPlayer] = useState<Player>(DEFAULT_PLAYER);
 
   const [state, setState] = useState(DEFAULT_STATE);
   function playTurn(player: Player, { x, y }: Coordinate) {
@@ -54,7 +54,10 @@ const App: React.FC = () => {
       <Footer>
         <PlayAgainButton
           style={{ visibility: isGameFinished ? "visible" : "hidden" }}
-          onClick={() => setState(DEFAULT_STATE)}
+          onClick={() => {
+            setState(DEFAULT_STATE);
+            setCurrentPlayer(DEFAULT_PLAYER);
+          }}
         >
           <h3>Play Again?</h3>
         </PlayAgainButton>

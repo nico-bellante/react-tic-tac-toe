@@ -16,6 +16,7 @@ const Game = (props: {
           {N.map((_, x) => {
             return (
               <Cell
+                key={`cell${x}-${y}`}
                 onClick={props.disabled ? undefined : () => props.takeCell({ x, y })}
                 state={props.state[y][x]}
               ></Cell>

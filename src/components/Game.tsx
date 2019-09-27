@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { COLORS } from "../theme";
 import Cell, { CellState } from "./Cell";
 
 const Game = (props: {
@@ -30,8 +29,6 @@ const Game = (props: {
 export default Game;
 
 const Wrapper = styled.div`
-  border: 1px solid gray;
-
   display: flex;
   flex-direction: column;
   align-items: center;
